@@ -33,12 +33,12 @@ const teacher4: Teacher = {
 console.log(teacher3);
 
 // 2. Extending the Teacher class
-interface Directors extends Teacher {
-  numberOfReports: number; // this extends the Teacher class for Directors objects created
+interface Director extends Teacher {
+  numberOfReports: number;
 }
 
 // Example 3
-const director1: Directors = {
+const director1: Director = {
   firstName: "John",
   lastName: "Doe",
   location: "London",
@@ -48,10 +48,15 @@ const director1: Directors = {
 console.log(director1);
 
 // 3. Printing teachers
-function printTeacher(firstName: string, lastName: string) {
-  return firstName.slice(0, 1) + "." + " " + lastName; // It returns the first letter of the firstName and the full lastName
+interface printTeacherFunction {
+  firstName: string;
+  lastName: string;
 }
-console.log(printTeacher("John", "Doe"));
+function printTeacher({ firstName, lastName }: printTeacherFunction) {
+  return `${firstName}. ${lastName}`;
+}
+
+console.log(printTeacher({ firstName: "John", lastName: "Doe" }));
 
 // 4. Writing a class
 // Interface for Constructor of the class
@@ -65,7 +70,7 @@ interface StudentClassInterface {
   displayName(): string;
 }
 
-class StudentClass implements StudentClassInterface {
+class StudentClass {
   firstName: string;
   lastName: string;
 
