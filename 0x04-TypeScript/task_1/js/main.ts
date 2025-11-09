@@ -1,19 +1,43 @@
-// Define the Teacher interface
+// 1. Building a Teacher interface
 interface Teacher {
-  readonly firstName: string;
-  readonly lastName: string;
+  readonly firstName: string; // modifiable only after initialized
+  readonly lastName: string; // modifiable only after initialized
   fullTimeEmployee: boolean;
+  yearsOfExperience?: number; // optional
   location: string;
-  yearsOfExperience?: number; // optional property
-  [key: string]: any; // allows any extra property
+  [key: string]: any; // For the posibility to add extra attributes
 }
 
-// Extend the Teacher interface with Directors
+// Example 1
+const teacher3: Teacher = {
+  firstName: "John",
+  lastName: "Doe",
+  fullTimeEmployee: false,
+  location: "London",
+  contract: false, // this extra attribute was not listed above (no typed error)
+
+  // NB: yearsOfExperience attribute was excluded but no typed error because it was set to optional (?)
+};
+
+// Example 2
+const teacher4: Teacher = {
+  firstName: "John",
+  lastName: "Agalga",
+  fullTimeEmployee: true,
+  yearsOfExperience: 5,
+  location: "Accra",
+  contract: false,
+  department: "Science", // another extra attribute
+};
+
+console.log(teacher3);
+
+// 2. Extending the Teacher class
 interface Directors extends Teacher {
-  numberOfReports: number;
+  numberOfReports: number; // this extends the Teacher class for Directors objects created
 }
 
-// Example usage
+// Example 3
 const director1: Directors = {
   firstName: "John",
   lastName: "Doe",
@@ -21,47 +45,42 @@ const director1: Directors = {
   fullTimeEmployee: true,
   numberOfReports: 17,
 };
+console.log(director1);
 
-// console.log(director1);
-
-// Define the function interface
-export interface printTeacherFunction {
-  (firstName: string, lastName: string): string;
+// 3. Printing teachers
+function printTeacher(firstName: string, lastName: string) {
+  return firstName.slice(0, 1) + "." + " " + lastName; // It returns the first letter of the firstName and the full lastName
 }
+console.log(printTeacher("John", "Doe"));
 
-// Implement the function
-export const printTeacher: printTeacherFunction = (firstName, lastName) => {
-  return `${firstName.charAt(0)}. ${lastName}`;
-};
-
-// Example usage
-// console.log(printTeacher("John", "Doe")); // Output: J. Doe
-
-// Interface describing constructor
-export interface StudentClassConstructor {
+// 4. Writing a class
+// Interface for Constructor of the class
+interface StudentConstructor {
   new (firstName: string, lastName: string): StudentClassInterface;
 }
 
-// Interface describing class methods
-export interface StudentClassInterface {
+// Interface for the class
+interface StudentClassInterface {
   workOnHomework(): string;
   displayName(): string;
 }
 
-// Class implementation
-export class StudentClass implements StudentClassInterface {
-  constructor(public firstName: string, public lastName: string) {}
+class StudentClass implements StudentClassInterface {
+  firstName: string;
+  lastName: string;
 
+  constructor(firstName: string, lastName: string) {
+    (this.firstName = firstName), (this.lastName = lastName);
+  }
   workOnHomework(): string {
     return "Currently working";
   }
-
   displayName(): string {
-    return this.firstName;
+    return `Hello, my name is ${this.firstName}`;
   }
 }
 
-// Example usage
-const student = new StudentClass("John", "Doe");
-console.log(student.displayName()); // John
-console.log(student.workOnHomework()); // Currently working
+// Example 4
+const student1 = new StudentClass("Emmanuel", "Adi");
+console.log(student1.workOnHomework());
+console.log(student1.displayName());
